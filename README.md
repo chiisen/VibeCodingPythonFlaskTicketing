@@ -30,6 +30,7 @@ pip install -r requirements.txt
 ```bash
 python app.py
 ```
+PS. 目前在 Windows Powershell 執行問題比較少。
 
 ### 3. 訪問網站
 
@@ -108,5 +109,7 @@ python app.py
 - 完整的錯誤處理
 - 跨平台相容性
 - 易於擴展的架構
+
+# PRD
 [PRD](PRD.md)
 
