@@ -6,7 +6,6 @@ This script tests the main functionality of the application
 
 import sys
 import os
-import requests
 from datetime import datetime
 
 # Add current directory to Python path
