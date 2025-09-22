@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>訂票表單 - 簡易訂票系統</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <h1 class="nav-title">簡易訂票系統</h1>
+                <ul class="nav-menu">
+                    <li><a href="{{ url_for('index') }}" class="nav-link">首頁</a></li>
+                    <li><a href="{{ url_for('book') }}" class="nav-link active">立即訂票</a></li>
+                    <li><a href="{{ url_for('admin') }}" class="nav-link">管理訂單</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="booking-section">
+            <h2>填寫訂票資訊</h2>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category if category != 'error' else 'danger' }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form action="{{ url_for('submit') }}" method="POST" class="booking-form" id="bookingForm">
+                <div class="form-section">
+                    <h3>票種選擇</h3>
+                    <div class="form-group">
+                        <label for="ticket_type">選擇票種：</label>
+                        <select name="ticket_type" id="ticket_type" required>
+                            <option value="">請選擇票種</option>
+                            {% for ticket in tickets %}
+                            <option value="{{ ticket.id }}" data-price="{{ ticket.price }}">{{ ticket.name }} - NT$ {{ ticket.price }}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="error-message" id="ticketTypeError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="quantity">數量：</label>
+                        <input type="number" name="quantity" id="quantity" min="1" max="10" required>
+                        <small class="form-help">每筆訂單最多10張票</small>
+                        <div class="error-message" id="quantityError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="totalPrice">總金額：</label>
+                        <div class="total-price-display" id="totalPrice">NT$ 0</div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>個人資訊</h3>
+                    <div class="form-group">
+                        <label for="name">姓名：</label>
+                        <input type="text" name="name" id="name" required>
+                        <div class="error-message" id="nameError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">電話：</label>
+                        <input type="tel" name="phone" id="phone" required>
+                        <div class="error-message" id="phoneError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">電子郵件：</label>
+                        <input type="email" name="email" id="email" required>
+                        <div class="error-message" id="emailError"></div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" id="submitBtn">提交訂票</button>
+                    <a href="{{ url_for('index') }}" class="btn btn-secondary">返回首頁</a>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 簡易訂票系統. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('bookingForm');
+            const ticketType = document.getElementById('ticket_type');
+            const quantity = document.getElementById('quantity');
+            const name = document.getElementById('name');
+            const phone = document.getElementById('phone');
+            const email = document.getElementById('email');
+            const totalPriceDisplay = document.getElementById('totalPrice');
+            const submitBtn = document.getElementById('submitBtn');
+
+            // Error message elements
+            const ticketTypeError = document.getElementById('ticketTypeError');
+            const quantityError = document.getElementById('quantityError');
+            const nameError = document.getElementById('nameError');
+            const phoneError = document.getElementById('phoneError');
+            const emailError = document.getElementById('emailError');
+
+            // Real-time total price calculation
+            function updateTotalPrice() {
+                const selectedOption = ticketType.options[ticketType.selectedIndex];
+                const price = parseInt(selectedOption.getAttribute('data-price')) || 0;
+                const qty = parseInt(quantity.value) || 0;
+                const total = price * qty;
+                totalPriceDisplay.textContent = `NT$ ${total}`;
+            }
+
+            // Form validation functions
+            function validateTicketType() {
+                if (!ticketType.value) {
+                    ticketTypeError.textContent = '請選擇票種';
+                    ticketType.classList.add('error');
+                    return false;
+                }
+                ticketTypeError.textContent = '';
+                ticketType.classList.remove('error');
+                return true;
+            }
+
+            function validateQuantity() {
+                const qty = parseInt(quantity.value);
+                if (!quantity.value) {
+                    quantityError.textContent = '請輸入數量';
+                    quantity.classList.add('error');
+                    return false;
+                }
+                if (isNaN(qty) || qty < 1 || qty > 10) {
+                    quantityError.textContent = '數量必須在1-10之間';
+                    quantity.classList.add('error');
+                    return false;
+                }
+                quantityError.textContent = '';
+                quantity.classList.remove('error');
+                return true;
+            }
+
+            function validateName() {
+                if (!name.value.trim()) {
+                    nameError.textContent = '請輸入姓名';
+                    name.classList.add('error');
+                    return false;
+                }
+                if (name.value.trim().length < 2) {
+                    nameError.textContent = '姓名至少需要2個字符';
+                    name.classList.add('error');
+                    return false;
+                }
+                nameError.textContent = '';
+                name.classList.remove('error');
+                return true;
+            }
+
+            function validatePhone() {
+                const phoneRegex = /^09\d{8}$/;
+                if (!phone.value.trim()) {
+                    phoneError.textContent = '請輸入電話號碼';
+                    phone.classList.add('error');
+                    return false;
+                }
+                if (!phoneRegex.test(phone.value.trim())) {
+                    phoneError.textContent = '請輸入有效的手機號碼 (09xxxxxxxx)';
+                    phone.classList.add('error');
+                    return false;
+                }
+                phoneError.textContent = '';
+                phone.classList.remove('error');
+                return true;
+            }
+
+            function validateEmail() {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!email.value.trim()) {
+                    emailError.textContent = '請輸入電子郵件';
+                    email.classList.add('error');
+                    return false;
+                }
+                if (!emailRegex.test(email.value.trim())) {
+                    emailError.textContent = '請輸入有效的電子郵件地址';
+                    email.classList.add('error');
+                    return false;
+                }
+                emailError.textContent = '';
+                email.classList.remove('error');
+                return true;
+            }
+
+            function validateForm() {
+                const isTicketTypeValid = validateTicketType();
+                const isQuantityValid = validateQuantity();
+                const isNameValid = validateName();
+                const isPhoneValid = validatePhone();
+                const isEmailValid = validateEmail();
+
+                return isTicketTypeValid && isQuantityValid && isNameValid && isPhoneValid && isEmailValid;
+            }
+
+            // Event listeners
+            ticketType.addEventListener('change', function() {
+                validateTicketType();
+                updateTotalPrice();
+            });
+
+            quantity.addEventListener('input', function() {
+                validateQuantity();
+                updateTotalPrice();
+            });
+
+            name.addEventListener('blur', validateName);
+            phone.addEventListener('blur', validatePhone);
+            email.addEventListener('blur', validateEmail);
+
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                if (!validateForm()) {
+                    e.preventDefault();
+                    // Scroll to first error
+                    const firstError = form.querySelector('.error-message:not(:empty)');
+                    if (firstError) {
+                        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                    return false;
+                }
+            });
+
+            // Initialize total price
+            updateTotalPrice();
+        });
+    </script>
+</body>
+</html>

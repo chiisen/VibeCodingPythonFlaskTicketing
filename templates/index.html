@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>簡易訂票系統</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <h1 class="nav-title">簡易訂票系統</h1>
+                <ul class="nav-menu">
+                    <li><a href="{{ url_for('index') }}" class="nav-link active">首頁</a></li>
+                    <li><a href="{{ url_for('book') }}" class="nav-link">立即訂票</a></li>
+                    <li><a href="{{ url_for('admin') }}" class="nav-link">管理訂單</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h2>歡迎來到簡易訂票系統</h2>
+            <p>選擇您心儀的票種，輕鬆完成訂票程序</p>
+        </section>
+
+        <section class="tickets-section">
+            <h2>票種介紹</h2>
+            <div class="tickets-grid">
+                {% for ticket in tickets %}
+                <div class="ticket-card">
+                    <div class="ticket-header">
+                        <h3>{{ ticket.name }}</h3>
+                        <span class="price">NT$ {{ ticket.price }}</span>
+                    </div>
+                    <p class="ticket-description">{{ ticket.description }}</p>
+                    <div class="ticket-actions">
+                        <a href="{{ url_for('book') }}?ticket={{ ticket.id }}" class="btn btn-primary">立即訂購</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 簡易訂票系統. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

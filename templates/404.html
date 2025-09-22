@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>頁面未找到 - 簡易訂票系統</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <h1 class="nav-title">簡易訂票系統</h1>
+                <ul class="nav-menu">
+                    <li><a href="{{ url_for('index') }}" class="nav-link">首頁</a></li>
+                    <li><a href="{{ url_for('book') }}" class="nav-link">立即訂票</a></li>
+                    <li><a href="{{ url_for('admin') }}" class="nav-link">管理訂單</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="error-section">
+            <div class="error-icon">404</div>
+            <h2>頁面未找到</h2>
+            <p class="error-message">抱歉，您請求的頁面不存在。</p>
+
+            <div class="error-actions">
+                <a href="{{ url_for('index') }}" class="btn btn-primary">返回首頁</a>
+                <a href="{{ url_for('book') }}" class="btn btn-secondary">前往訂票</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 簡易訂票系統. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

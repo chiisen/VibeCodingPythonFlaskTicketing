@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理訂單 - 簡易訂票系統</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <h1 class="nav-title">簡易訂票系統</h1>
+                <ul class="nav-menu">
+                    <li><a href="{{ url_for('index') }}" class="nav-link">首頁</a></li>
+                    <li><a href="{{ url_for('book') }}" class="nav-link">立即訂票</a></li>
+                    <li><a href="{{ url_for('admin') }}" class="nav-link active">管理訂單</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="admin-section">
+            <div class="admin-header">
+                <h2>訂單管理</h2>
+                <div class="order-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">總訂單數：</span>
+                        <span class="stat-value">{{ orders|length }}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">待確認：</span>
+                        <span class="stat-value">{{ orders|selectattr('status', 'equalto', 'pending')|list|length }}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">已確認：</span>
+                        <span class="stat-value">{{ orders|selectattr('status', 'equalto', 'confirmed')|list|length }}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">已取消：</span>
+                        <span class="stat-value">{{ orders|selectattr('status', 'equalto', 'cancelled')|list|length }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search and Filter Form -->
+            <div class="admin-controls">
+                <form method="GET" class="search-form">
+                    <div class="search-group">
+                        <input type="text" name="search" placeholder="搜尋訂票人、電話或電子郵件..." value="{{ search_term }}" class="search-input">
+                        <select name="status" class="status-filter">
+                            <option value="all" {% if status_filter == 'all' %}selected{% endif %}>所有狀態</option>
+                            <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>待確認</option>
+                            <option value="confirmed" {% if status_filter == 'confirmed' %}selected{% endif %}>已確認</option>
+                            <option value="cancelled" {% if status_filter == 'cancelled' %}selected{% endif %}>已取消</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary">搜尋</button>
+                        <a href="{{ url_for('export_orders') }}" class="btn btn-secondary">匯出 CSV</a>
+                    </div>
+                </form>
+            </div>
+
+            {% if orders %}
+            <div class="orders-table-container">
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>訂單編號</th>
+                            <th>票種</th>
+                            <th>數量</th>
+                            <th>總金額</th>
+                            <th>訂票人</th>
+                            <th>電話</th>
+                            <th>電子郵件</th>
+                            <th>狀態</th>
+                            <th>訂票時間</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr class="order-row status-{{ order.status }}">
+                            <td>{{ order.id }}</td>
+                            <td>{{ order.ticket_type }}</td>
+                            <td>{{ order.quantity }} 張</td>
+                            <td class="price">NT$ {{ order.total_price }}</td>
+                            <td>{{ order.name }}</td>
+                            <td>{{ order.phone }}</td>
+                            <td>{{ order.email }}</td>
+                            <td>
+                                <form method="POST" action="{{ url_for('update_order_status', order_id=order.id) }}" class="status-form">
+                                    <select name="status" class="status-select" onchange="this.form.submit()">
+                                        <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>待確認</option>
+                                        <option value="confirmed" {% if order.status == 'confirmed' %}selected{% endif %}>已確認</option>
+                                        <option value="cancelled" {% if order.status == 'cancelled' %}selected{% endif %}>已取消</option>
+                                    </select>
+                                </form>
+                            </td>
+                            <td>{{ order.order_time }}</td>
+                            <td>
+                                <a href="{{ url_for('success', order_id=order.id) }}" class="btn btn-small btn-primary">查看詳情</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="no-orders">
+                <div class="no-orders-icon">📋</div>
+                <h3>
+                    {% if search_term or status_filter != 'all' %}
+                        沒有找到符合條件的訂單
+                    {% else %}
+                        目前沒有訂單
+                    {% endif %}
+                </h3>
+                <p>
+                    {% if search_term or status_filter != 'all' %}
+                        請調整搜尋條件或狀態篩選
+                    {% else %}
+                        還沒有任何訂票記錄
+                    {% endif %}
+                </p>
+                <a href="{{ url_for('book') }}" class="btn btn-primary">開始接收訂票</a>
+            </div>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 簡易訂票系統. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
