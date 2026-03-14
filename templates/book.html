@@ -1,45 +1,54 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-TW" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>訂票表單 - VibeCoding 票務系統</title>
+    <title>VibeCoding 票務系統 - 訂票表單</title>
+    <meta name="description" content="VibeCoding 票務系統訂票表單">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <header>
-        <nav class="navbar">
+    <a href="#main-content" class="skip-link">跳至主要內容</a>
+    <header role="banner">
+        <nav class="navbar" aria-label="主導航">
             <div class="nav-container">
                 <div class="nav-logo">
-                    <div class="nav-logo-icon"> TICKET</div>
-                    <h1 class="nav-title">VibeCoding 票務系統</h1>
+                    <a href="{{ url_for('index') }}" class="nav-logo-icon" aria-label="VibeCoding 首頁">
+                        TICKET
+                    </a>
+                    <h1 class="nav-title">
+                        <a href="{{ url_for('index') }}" style="color: inherit; text-decoration: none; display: block;">
+                            VibeCoding 票務系統
+                        </a>
+                    </h1>
                 </div>
-                <ul class="nav-menu">
-                    <li><a href="{{ url_for('index') }}" class="nav-link">首頁</a></li>
-                    <li><a href="{{ url_for('book') }}" class="nav-link active">立即訂票</a></li>
-                    <li><a href="{{ url_for('admin') }}" class="nav-link">管理訂單</a></li>
+                <ul class="nav-menu" role="menubar">
+                    <li role="none"><a href="{{ url_for('index') }}" class="nav-link" role="menuitem">首頁</a></li>
+                    <li role="none"><a href="{{ url_for('book') }}" class="nav-link active" role="menuitem" aria-current="page">立即訂票</a></li>
+                    <li role="none"><a href="{{ url_for('admin') }}" class="nav-link" role="menuitem">管理訂單</a></li>
                 </ul>
             </div>
         </nav>
     </header>
 
-    <main class="container">
-        <section class="booking-section">
-            <h2 class="section-title">填寫訂票資訊</h2>
+    <main id="main-content" class="container" role="main">
+        <section class="booking-section" aria-labelledby="booking-heading">
+            <h2 class="section-title" id="booking-heading">填寫訂票資訊</h2>
 
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
-                        <div class="alert alert-{{ category if category != 'error' else 'danger' }}">
-                            {% if category == 'error' %}⚠️ {% elif category == 'success' %}✅ {% endif %}
-                            {{ message }}
+                        <div class="alert alert-{{ 'danger' if category == 'error' else 'success' if category == 'success' else 'warning' }} {{
+                                 'alert-danger' if category == 'error' else 'alert-success' if category == 'success' else 'alert-warning' }}"
+                             role="alert" aria-live="polite">
+                            <span aria-hidden="true">{% if category == 'error' %}&#9888;{% elif category == 'success' %}&#10004;{% else %}&#9889;{% endif %}</span>
+                            <span>{{ message }}</span>
                         </div>
                     {% endfor %}
                 {% endif %}
             {% endwith %}
 
-            <form action="{{ url_for('submit') }}" method="POST" class="booking-form" id="bookingForm">
-                <!-- CSRF Token -->
+            <form action="{{ url_for('submit') }}" method="POST" class="booking-form" id="bookingForm" novalidate>
                 <input type="hidden" name="csrf_token" value="{{ generate_csrf_token() }}"/>
 
                 <div class="form-section">
@@ -47,25 +56,26 @@
 
                     <div class="form-group">
                         <label for="ticket_type" data-required="*">選擇票種：</label>
-                        <select name="ticket_type" id="ticket_type" required>
+                        <select name="ticket_type" id="ticket_type" required aria-describedby="ticket_type_help">
                             <option value="">請選擇票種</option>
                             {% for ticket in tickets %}
                             <option value="{{ ticket.id }}" data-price="{{ ticket.price }}">{{ ticket.name }} - NT$ {{ ticket.price }}</option>
                             {% endfor %}
                         </select>
-                        <div class="error-message" id="ticketTypeError"></div>
+                        <small id="ticket_type_help" class="form-help">請選擇您想要的票種</small>
+                        <div class="error-message" id="ticketTypeError" role="alert" aria-live="assertive"></div>
                     </div>
 
                     <div class="form-group">
                         <label for="quantity" data-required="*">數量：</label>
-                        <input type="number" name="quantity" id="quantity" min="1" max="10" required>
-                        <small class="form-help">每筆訂單最多10張票</small>
-                        <div class="error-message" id="quantityError"></div>
+                        <input type="number" name="quantity" id="quantity" min="1" max="10" required aria-describedby="quantity_help">
+                        <small id="quantity_help" class="form-help">每筆訂單最多10張票</small>
+                        <div class="error-message" id="quantityError" role="alert" aria-live="assertive"></div>
                     </div>
 
                     <div class="form-group">
                         <label for="totalPrice">總金額：</label>
-                        <div class="total-price-display" id="totalPrice">NT$ 0</div>
+                        <div class="total-price-display" id="totalPrice" aria-label="總金額">NT$ 0</div>
                     </div>
                 </div>
 
@@ -74,29 +84,30 @@
 
                     <div class="form-group">
                         <label for="name" data-required="*">姓名：</label>
-                        <input type="text" name="name" id="name" placeholder="請輸入您的姓名" required>
-                        <div class="error-message" id="nameError"></div>
+                        <input type="text" name="name" id="name" placeholder="請輸入您的姓名" required aria-describedby="name_help">
+                        <small id="name_help" class="form-help">請輸入您的真實姓名</small>
+                        <div class="error-message" id="nameError" role="alert" aria-live="assertive"></div>
                     </div>
 
                     <div class="form-group">
                         <label for="phone" data-required="*">電話：</label>
-                        <input type="tel" name="phone" id="phone" placeholder="09xxxxxxxx" pattern="09\d{8}" required>
-                        <small class="form-help">請輸入台灣手機號碼 (09xxxxxxxx)</small>
-                        <div class="error-message" id="phoneError"></div>
+                        <input type="tel" name="phone" id="phone" placeholder="09xxxxxxxx" pattern="09\d{8}" required aria-describedby="phone_help">
+                        <small id="phone_help" class="form-help">請輸入台灣手機號碼 (09xxxxxxxx)</small>
+                        <div class="error-message" id="phoneError" role="alert" aria-live="assertive"></div>
                     </div>
 
                     <div class="form-group">
                         <label for="email" data-required="*">電子郵件：</label>
-                        <input type="email" name="email" id="email" placeholder="example@mail.com" required>
-                        <small class="form-help">我們會發送確認信至您的電子郵件</small>
-                        <div class="error-message" id="emailError"></div>
+                        <input type="email" name="email" id="email" placeholder="example@mail.com" required aria-describedby="email_help">
+                        <small id="email_help" class="form-help">我們會發送確認信至您的電子郵件</small>
+                        <div class="error-message" id="emailError" role="alert" aria-live="assertive"></div>
                     </div>
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                    <button type="submit" class="btn btn-primary" id="submitBtn" aria-label="確認訂票">
                         <span>確認訂票</span>
-                        <span style="margin-left: 8px;">→</span>
+                        <span aria-hidden="true" style="margin-left: 8px;">&rarr;</span>
                     </button>
                     <a href="{{ url_for('index') }}" class="btn btn-secondary">返回首頁</a>
                 </div>
@@ -104,7 +115,7 @@
         </section>
     </main>
 
-    <footer class="footer">
+    <footer class="footer" role="contentinfo">
         <div class="container">
             <p>&copy; 2025 VibeCoding 簡易訂票系統. All rights reserved.</p>
         </div>
@@ -245,7 +256,6 @@
             form.addEventListener('submit', function(e) {
                 if (!validateForm()) {
                     e.preventDefault();
-                    // Scroll to first error
                     const firstError = form.querySelector('.error-message:not(:empty)');
                     if (firstError) {
                         firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -253,12 +263,11 @@
                     return false;
                 }
 
-                // Add loading state
                 submitBtn.disabled = true;
                 submitBtn.style.opacity = '0.7';
+                submitBtn.setAttribute('aria-busy', 'true');
             });
 
-            // Initialize total price
             updateTotalPrice();
         });
     </script>

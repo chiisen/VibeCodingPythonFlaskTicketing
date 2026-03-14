@@ -1,130 +1,140 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-TW" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>管理訂單 - VibeCoding 票務系統</title>
+    <title>VibeCoding 票務系統 - 訂單管理</title>
+    <meta name="description" content="VibeCoding 票務系統管理後台">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <header>
-        <nav class="navbar">
+    <a href="#main-content" class="skip-link">跳至主要內容</a>
+    <header role="banner">
+        <nav class="navbar" aria-label="主導航">
             <div class="nav-container">
                 <div class="nav-logo">
-                    <div class="nav-logo-icon"> TICKET</div>
-                    <h1 class="nav-title">VibeCoding 票務系統</h1>
+                    <a href="{{ url_for('index') }}" class="nav-logo-icon" aria-label="VibeCoding 首頁">
+                        TICKET
+                    </a>
+                    <h1 class="nav-title">
+                        <a href="{{ url_for('index') }}" style="color: inherit; text-decoration: none; display: block;">
+                            VibeCoding 票務系統
+                        </a>
+                    </h1>
                 </div>
-                <ul class="nav-menu">
-                    <li><a href="{{ url_for('index') }}" class="nav-link">首頁</a></li>
-                    <li><a href="{{ url_for('book') }}" class="nav-link">立即訂票</a></li>
-                    <li><a href="{{ url_for('admin') }}" class="nav-link active">管理訂單</a></li>
+                <ul class="nav-menu" role="menubar">
+                    <li role="none"><a href="{{ url_for('index') }}" class="nav-link" role="menuitem">首頁</a></li>
+                    <li role="none"><a href="{{ url_for('book') }}" class="nav-link" role="menuitem">立即訂票</a></li>
+                    <li role="none"><a href="{{ url_for('admin') }}" class="nav-link active" role="menuitem" aria-current="page">管理訂單</a></li>
                 </ul>
             </div>
         </nav>
     </header>
 
-    <main class="container">
-        <section class="admin-section">
+    <main id="main-content" class="container" role="main">
+        <section class="admin-section" aria-labelledby="admin-heading">
             <div class="admin-header">
-                <h2 class="section-title">訂單管理</h2>
-                <div class="stats-grid">
-                    <div class="stat-card total">
-                        <div class="stat-icon">📋</div>
-                        <div class="stat-content">
-                            <span class="stat-label">總訂單數</span>
-                            <span class="stat-value">{{ orders|length }}</span>
-                        </div>
+                <h2 id="admin-heading" class="section-title" style="margin: 0; padding: 0;">訂單管理</h2>
+            </div>
+
+            <div class="stats-grid" role="region" aria-label="訂單統計">
+                <div class="stat-card total">
+                    <div class="stat-icon" aria-hidden="true">&#128203;</div>
+                    <div class="stat-content">
+                        <span class="stat-label">總訂單數</span>
+                        <span class="stat-value">{{ orders|length }}</span>
                     </div>
-                    <div class="stat-card pending">
-                        <div class="stat-icon">⏳</div>
-                        <div class="stat-content">
-                            <span class="stat-label">待確認</span>
-                            <span class="stat-value">{{ stats.pending }}</span>
-                        </div>
+                </div>
+                <div class="stat-card pending">
+                    <div class="stat-icon" aria-hidden="true">&#9201;</div>
+                    <div class="stat-content">
+                        <span class="stat-label">待確認</span>
+                        <span class="stat-value">{{ stats.pending }}</span>
                     </div>
-                    <div class="stat-card confirmed">
-                        <div class="stat-icon">✓</div>
-                        <div class="stat-content">
-                            <span class="stat-label">已確認</span>
-                            <span class="stat-value">{{ stats.confirmed }}</span>
-                        </div>
+                </div>
+                <div class="stat-card confirmed">
+                    <div class="stat-icon" aria-hidden="true">&#10004;</div>
+                    <div class="stat-content">
+                        <span class="stat-label">已確認</span>
+                        <span class="stat-value">{{ stats.confirmed }}</span>
                     </div>
-                    <div class="stat-card cancelled">
-                        <div class="stat-icon">✕</div>
-                        <div class="stat-content">
-                            <span class="stat-label">已取消</span>
-                            <span class="stat-value">{{ stats.cancelled }}</span>
-                        </div>
+                </div>
+                <div class="stat-card cancelled">
+                    <div class="stat-icon" aria-hidden="true">&#10005;</div>
+                    <div class="stat-content">
+                        <span class="stat-label">已取消</span>
+                        <span class="stat-value">{{ stats.cancelled }}</span>
                     </div>
                 </div>
             </div>
 
             <!-- Search and Filter Form -->
-            <div class="admin-controls">
+            <div class="admin-controls" role="search" aria-labelledby="search-heading">
+                <h3 id="search-heading" class="visually-hidden">搜尋與篩選訂單</h3>
                 <form method="GET" class="search-form">
                     <div class="search-box">
                         <div class="search-input-wrapper">
-                            <span class="search-icon">🔍</span>
-                            <input type="text" name="search" placeholder="搜尋訂票人、電話或電子郵件..." value="{{ search_term }}" class="search-input">
+                            <span class="search-icon" aria-hidden="true">&#128269;</span>
+                            <input type="text" name="search" placeholder="搜尋訂票人、電話或電子郵件..." value="{{ search_term }}" class="search-input" aria-label="搜尋訂單">
                             {% if search_term %}
-                            <a href="{{ url_for('admin') }}" class="clear-btn" title="清除搜尋">✕</a>
+                            <a href="{{ url_for('admin') }}" class="clear-btn" aria-label="清除搜尋條件">&#10005;</a>
                             {% endif %}
                         </div>
-                        <select name="status" class="status-select">
+                        <select name="status" class="status-select" aria-label="篩選狀態">
                             <option value="all" {% if status_filter == 'all' %}selected{% endif %}>所有狀態</option>
                             <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>待確認</option>
                             <option value="confirmed" {% if status_filter == 'confirmed' %}selected{% endif %}>已確認</option>
                             <option value="cancelled" {% if status_filter == 'cancelled' %}selected{% endif %}>已取消</option>
                         </select>
-                        <button type="submit" class="btn btn-primary">搜尋</button>
-                        <a href="{{ url_for('export_orders') }}" class="btn btn-secondary">匯出 CSV</a>
+                        <button type="submit" class="btn btn-primary" aria-label="搜尋訂單">搜尋</button>
+                        <a href="{{ url_for('export_orders') }}" class="btn btn-secondary" aria-label="匯出所有訂單為 CSV">匯出 CSV</a>
                     </div>
                 </form>
             </div>
 
             {% if orders %}
-            <div class="orders-table-container">
-                <table class="orders-table">
+            <div class="orders-table-container" role="region" aria-label="訂單列表">
+                <table class="orders-table" aria-describedby="orders-caption">
+                    <caption id="orders-caption" class="visually-hidden">所有訂單明細，包含訂單編號、票種、數量、總金額、訂票人、電話、電子郵件、狀態和訂票時間</caption>
                     <thead>
                         <tr>
-                            <th>訂單編號</th>
-                            <th>票種</th>
-                            <th>數量</th>
-                            <th>總金額</th>
-                            <th>訂票人</th>
-                            <th>電話</th>
-                            <th>電子郵件</th>
-                            <th>狀態</th>
-                            <th>訂票時間</th>
-                            <th>操作</th>
+                            <th scope="col">訂單編號</th>
+                            <th scope="col">票種</th>
+                            <th scope="col">數量</th>
+                            <th scope="col">總金額</th>
+                            <th scope="col">訂票人</th>
+                            <th scope="col">電話</th>
+                            <th scope="col">電子郵件</th>
+                            <th scope="col">狀態</th>
+                            <th scope="col">訂票時間</th>
+                            <th scope="col">操作</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for order in orders %}
-                        <tr class="order-row status-{{ order.status }}">
+                        <tr class="order-row status-{{ order.status }}" scope="row">
                             <td class="order-id">
                                 <span class="order-number">{{ order.order_number }}</span>
                             </td>
                             <td>{{ order.ticket_name }}</td>
                             <td>
-                                <span class="quantity-badge">{{ order.quantity }}張</span>
+                                <span class="quantity-badge" aria-label="數量">{{ order.quantity }}張</span>
                             </td>
-                            <td class="price">NT$ {{ order.total_price }}</td>
+                            <td class="price" aria-label="總金額">NT$ {{ order.total_price }}</td>
                             <td>{{ order.name|sanitize }}</td>
                             <td>{{ order.phone|sanitize }}</td>
                             <td>{{ order.email|sanitize }}</td>
-                            <td>
-                                <span class="status-badge status-{{ order.status }}">
-                                    {% if order.status == 'pending' %}⏳ 待確認{% elif order.status == 'confirmed' %}✓ 已確認{% else %}✕ 已取消{% endif %}
+                            <td aria-label="訂單狀態">
+                                <span class="status-badge status-{{ order.status }}" role="status">
+                                    {% if order.status == 'pending' %}&#9201; 待確認{% elif order.status == 'confirmed' %}&#10004; 已確認{% else %}&#10005; 已取消{% endif %}
                                 </span>
                             </td>
-                            <td class="timestamp">{{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td class="timestamp" aria-label="訂票時間">{{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
                             <td class="action-cell">
-                                <a href="{{ url_for('success', order_id=order.id) }}" class="btn-view">查看詳情</a>
-                                <form method="POST" action="{{ url_for('update_order_status', order_id=order.id) }}" class="status-form">
-                                    <!-- CSRF Token -->
+                                <a href="{{ url_for('success', order_id=order.id) }}" class="btn-view" aria-label="查看訂單 {{ order.order_number }} 詳情">查看詳情</a>
+                                <form method="POST" action="{{ url_for('update_order_status', order_id=order.id) }}" class="status-form" aria-label="更新訂單狀態">
                                     <input type="hidden" name="csrf_token" value="{{ generate_csrf_token() }}"/>
-                                    <select name="status" class="status-select-small" onchange="this.form.submit()">
+                                    <select name="status" class="status-select-small" aria-label="變更狀態" onchange="this.form.submit()">
                                         <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>待確認</option>
                                         <option value="confirmed" {% if order.status == 'confirmed' %}selected{% endif %}>已確認</option>
                                         <option value="cancelled" {% if order.status == 'cancelled' %}selected{% endif %}>已取消</option>
@@ -137,8 +147,8 @@
                 </table>
             </div>
             {% else %}
-            <div class="no-orders">
-                <div class="no-orders-icon">📋</div>
+            <div class="no-orders" role="status">
+                <div class="no-orders-icon" aria-hidden="true">&#128203;</div>
                 <h3>
                     {% if search_term or status_filter != 'all' %}
                         沒有找到符合條件的訂單
@@ -159,7 +169,7 @@
         </section>
     </main>
 
-    <footer class="footer">
+    <footer class="footer" role="contentinfo">
         <div class="container">
             <p>&copy; 2025 VibeCoding 簡易訂票系統. All rights reserved.</p>
         </div>

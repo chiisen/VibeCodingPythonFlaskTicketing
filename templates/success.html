@@ -1,40 +1,48 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-TW" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>訂票成功 - VibeCoding 票務系統</title>
+    <title>VibeCoding 票務系統 - 訂票成功</title>
+    <meta name="description" content="訂票成功確認頁面">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <header>
-        <nav class="navbar">
+    <a href="#main-content" class="skip-link">跳至主要內容</a>
+    <header role="banner">
+        <nav class="navbar" aria-label="主導航">
             <div class="nav-container">
                 <div class="nav-logo">
-                    <div class="nav-logo-icon"> TICKET</div>
-                    <h1 class="nav-title">VibeCoding 票務系統</h1>
+                    <a href="{{ url_for('index') }}" class="nav-logo-icon" aria-label="VibeCoding 首頁">
+                        TICKET
+                    </a>
+                    <h1 class="nav-title">
+                        <a href="{{ url_for('index') }}" style="color: inherit; text-decoration: none; display: block;">
+                            VibeCoding 票務系統
+                        </a>
+                    </h1>
                 </div>
-                <ul class="nav-menu">
-                    <li><a href="{{ url_for('index') }}" class="nav-link">首頁</a></li>
-                    <li><a href="{{ url_for('book') }}" class="nav-link">立即訂票</a></li>
-                    <li><a href="{{ url_for('admin') }}" class="nav-link">管理訂單</a></li>
+                <ul class="nav-menu" role="menubar">
+                    <li role="none"><a href="{{ url_for('index') }}" class="nav-link" role="menuitem">首頁</a></li>
+                    <li role="none"><a href="{{ url_for('book') }}" class="nav-link" role="menuitem">立即訂票</a></li>
+                    <li role="none"><a href="{{ url_for('admin') }}" class="nav-link" role="menuitem">管理訂單</a></li>
                 </ul>
             </div>
         </nav>
     </header>
 
-    <main class="container">
-        <section class="success-section">
-            <div class="success-icon">✓</div>
-            <h2>訂票成功！</h2>
+    <main id="main-content" class="container" role="main">
+        <section class="success-section" aria-labelledby="success-heading">
+            <div class="success-icon" aria-hidden="true">&#10004;</div>
+            <h2 id="success-heading" class="success-message">訂票成功！</h2>
             <p class="success-message">感謝您的訂票，我們已經收到您的訂單。</p>
 
-            <div class="order-details">
-                <h3>訂單明細</h3>
+            <div class="order-details" aria-labelledby="order-details-heading">
+                <h3 id="order-details-heading">訂單明細</h3>
                 <div class="order-info">
                     <div class="info-group">
                         <label>訂單編號：</label>
-                        <span><code style="font-size: 0.9em; padding: 0.2em 0.6em; background: #e9ecef; border-radius: 4px;">{{ order.order_number }}</code></span>
+                        <span aria-label="訂單編號">{{ order.order_number }}</span>
                     </div>
                     <div class="info-group">
                         <label>票種：</label>
@@ -76,18 +84,18 @@
                 <a href="{{ url_for('index') }}" class="btn btn-secondary">返回首頁</a>
             </div>
 
-            <div class="notice">
-                <h4>📧 電子郵件確認</h4>
+            <div class="notice" role="alert" aria-labelledby="notice-heading">
+                <h4 id="notice-heading">&#128231; 電子郵件確認</h4>
                 <p>我們已經發送訂票確認郵件至您的電子郵件信箱：</p>
-                <p style="font-size: 1.2rem; font-weight: 700; color: white; margin: 1rem 0;">{{ order.email }}</p>
+                <p class="success-message" aria-label="電子郵件">{{ order.email }}</p>
                 <p>請檢查您的電子郵件信箱以確認訂票詳情。如果您沒有收到郵件，請檢查垃圾郵件資料夾。</p>
 
-                <div class="email-preview">
-                    <h5>📧 郵件預覽</h5>
+                <div class="email-preview" aria-labelledby="email-preview-heading">
+                    <h5 id="email-preview-heading">&#128231; 郵件預覽</h5>
                     <div class="email-content">
-                        <p style="font-weight: bold; color: #1e3c72; border-bottom: 1px solid #e9ecef; padding-bottom: 0.5rem;">訂票確認通知</p>
+                        <p style="font-weight: 700; color: var(--color-primary); border-bottom: var(--border-width-sm) solid var(--color-border); padding-bottom: 12px;">訂票確認通知</p>
                         <p>親愛的 <strong>{{ order.name }}</strong> 先生/女士，</p>
-                        <p style="color: #27ae60;">您的訂票已成功處理！訂單詳情如下：</p>
+                        <p style="color: var(--color-success);">您的訂票已成功處理！訂單詳情如下：</p>
                         <ul>
                             <li><strong>訂單編號：</strong> {{ order.order_number }}</li>
                             <li><strong>票種：</strong> {{ order.ticket_name }}</li>
@@ -95,15 +103,15 @@
                             <li><strong>總金額：</strong> NT$ {{ order.total_price }}</li>
                             <li><strong>訂票時間：</strong> {{ order.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</li>
                         </ul>
-                        <p style="color: #7f8c8d;">感謝您的訂票！如有任何問題，請聯繫客服。</p>
-                        <p style="color: #7f8c8d;">祝您觀賞愉快！</p>
+                        <p style="color: var(--color-text-secondary);">感謝您的訂票！如有任何問題，請聯繫客服。</p>
+                        <p style="color: var(--color-text-secondary);">祝您觀賞愉快！</p>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="footer">
+    <footer class="footer" role="contentinfo">
         <div class="container">
             <p>&copy; 2025 VibeCoding 簡易訂票系統. All rights reserved.</p>
         </div>

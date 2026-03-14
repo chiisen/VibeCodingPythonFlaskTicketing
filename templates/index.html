@@ -1,48 +1,55 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-TW" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>簡易訂票系統 - VibeCoding</title>
-    <meta name="description" content="現代化簡易訂票系統">
+    <title>VibeCoding 票務系統 - 首頁</title>
+    <meta name="description" content="VibeCoding 票務系統，提供優質的線上訂票服務">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <header>
-        <nav class="navbar">
+    <a href="#main-content" class="skip-link">跳至主要內容</a>
+    <header role="banner">
+        <nav class="navbar" aria-label="主導航">
             <div class="nav-container">
                 <div class="nav-logo">
-                    <div class="nav-logo-icon"> TICKET</div>
-                    <h1 class="nav-title">VibeCoding 票務系統</h1>
+                    <a href="{{ url_for('index') }}" class="nav-logo-icon" aria-label="VibeCoding 首頁">
+                        TICKET
+                    </a>
+                    <h1 class="nav-title">
+                        <a href="{{ url_for('index') }}" style="color: inherit; text-decoration: none; display: block;">
+                            VibeCoding 票務系統
+                        </a>
+                    </h1>
                 </div>
-                <ul class="nav-menu">
-                    <li><a href="{{ url_for('index') }}" class="nav-link active">首頁</a></li>
-                    <li><a href="{{ url_for('book') }}" class="nav-link">立即訂票</a></li>
-                    <li><a href="{{ url_for('admin') }}" class="nav-link">管理訂單</a></li>
+                <ul class="nav-menu" role="menubar">
+                    <li role="none"><a href="{{ url_for('index') }}" class="nav-link active" role="menuitem" aria-current="page">首頁</a></li>
+                    <li role="none"><a href="{{ url_for('book') }}" class="nav-link" role="menuitem">立即訂票</a></li>
+                    <li role="none"><a href="{{ url_for('admin') }}" class="nav-link" role="menuitem">管理訂單</a></li>
                 </ul>
             </div>
         </nav>
     </header>
 
-    <main class="container">
-        <section class="hero">
-            <h2>🎉 歡迎來到 VibeCoding 票務系統</h2>
+    <main id="main-content" class="container" role="main">
+        <section class="hero" aria-labelledby="hero-heading">
+            <h2 id="hero-heading">歡迎來到 VibeCoding 票務系統</h2>
             <p>選取您心儀的票種，輕鬆完成訂票程序！<br>提供即時驗證、動態價格與最佳體驗</p>
-            <a href="{{ url_for('book') }}" class="hero-btn">立即訂票</a>
+            <a href="{{ url_for('book') }}" class="hero-btn" aria-label="開始訂票">立即訂票</a>
         </section>
 
-        <section class="tickets-section">
-            <h2 class="section-title">(fmt:3) 票種介紹</h2>
+        <section class="tickets-section" aria-labelledby="tickets-heading">
+            <h2 class="section-title" id="tickets-heading">票種介紹</h2>
             <div class="tickets-grid">
                 {% for ticket in tickets %}
-                <div class="ticket-card {{ 'student' if ticket.id == 2 else 'vip' if ticket.id == 3 else 'group' if ticket.id == 4 else 'general' }}">
+                <div class="ticket-card {{ 'student' if ticket.id == 2 else 'vip' if ticket.id == 3 else 'group' if ticket.id == 4 else 'general' }}" role="article">
                     <div class="ticket-header">
                         <h3>{{ ticket.name }}</h3>
-                        <span class="ticket-price">NT$ {{ ticket.price }}</span>
+                        <span class="ticket-price" aria-label="票價">NT$ {{ ticket.price }}</span>
                     </div>
                     <p class="ticket-description">{{ ticket.description }}</p>
                     <div class="ticket-actions">
-                        <a href="{{ url_for('book') }}?ticket={{ ticket.id }}" class="btn btn-primary">立即訂購</a>
+                        <a href="{{ url_for('book') }}?ticket={{ ticket.id }}" class="btn btn-primary" aria-label="訂購 {{ ticket.name }}">立即訂購</a>
                     </div>
                 </div>
                 {% endfor %}
@@ -50,7 +57,7 @@
         </section>
     </main>
 
-    <footer class="footer">
+    <footer class="footer" role="contentinfo">
         <div class="container">
             <p>&copy; 2025 VibeCoding 簡易訂票系統. All rights reserved.</p>
         </div>

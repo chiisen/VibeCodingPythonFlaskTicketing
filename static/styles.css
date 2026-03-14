@@ -1,5 +1,6 @@
 /* ═══════════════════════════════════════════
    🎨 新野獸主義 (Neo-Brutalism) 樣式
+   基於 UI/UX Pro Max 規範優化
    ═══════════════════════════════════════════ */
 
 /* Reset and base styles */
@@ -10,65 +11,99 @@
 }
 
 :root {
-    /* 新野獸主義 - 霓虹配色 */
-    --primary-color: #ff0050;
-    --secondary-color: #00e5ff;
-    --accent-color: #ffea00;
-    --success-color: #00ff9d;
-    --warning-color: #ffae00;
-    --danger-color: #ff003c;
-    --text-dark: #0a0a0a;
-    --text-light: #333333;
-    --bg-light: #f0f0f0;
-    --white: #ffffff;
-    --bg-color: #e0e0e0;
+    /* 設計 Token - 8px 網格系統 */
+    --unit-1: 8px;
+    --unit-2: 16px;
+    --unit-3: 24px;
+    --unit-4: 32px;
+    --unit-5: 40px;
+    --unit-6: 48px;
 
-    /* 新野獸主義特徵 */
-    --border-width: 3px;
-    --border-color: #000000;
-    --shadow-offset: 6px;
-    --shadow-color: rgba(0, 0, 0, 0.4);
-    --radius-sm: 0px;
+    /* 顏色系統 - WCAG AA 對比度標準 */
+    --color-primary: #6366f1;
+    --color-primary-dark: #4f46e5;
+    --color-secondary: #ec4899;
+    --color-accent: #f59e0b;
+    --color-success: #10b981;
+    --color-warning: #f59e0b;
+    --color-danger: #ef4444;
+
+    --color-text-primary: #1e293b;
+    --color-text-secondary: #64748b;
+    --color-text-light: #94a3b8;
+
+    --color-bg-primary: #ffffff;
+    --color-bg-secondary: #f1f5f9;
+    --color-bg-tertiary: #f8fafc;
+
+    --color-border: #e2e8f0;
+    --color-border-dark: #1e293b;
+
+    /* 陰影系統 */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+    /* 圓角系統 */
+    --radius-sm: 4px;
     --radius-md: 8px;
-    --radius-lg: 16px;
-    --transition: none;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+
+    /* 邊框系統 */
+    --border-width-xs: 1px;
+    --border-width-sm: 2px;
+    --border-width-md: 3px;
+    --border-width-lg: 4px;
+
+    /* 動畫系統 - 150-300ms */
+    --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body {
-    font-family: 'Helvetica Neue', Arial, 'Microsoft JhengHei', sans-serif;
-    line-height: 1.5;
-    color: var(--text-dark);
-    background-color: var(--bg-color);
-    font-weight: 700;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft JhengHei',
+                 'PingFang TC', Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-tertiary);
+    font-size: 16px;
     min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 24px;
 }
 
 /* ═══════════════════════════════════════════
-   🎯 Navigation - 新野獸主義導航列
+   🎯 Navigation - 優化導航列
    ═══════════════════════════════════════════ */
 .navbar {
-    background: var(--white);
-    border: var(--border-width) solid var(--border-color);
-    border-bottom: var(--border-width) solid var(--border-color);
-    border-right: var(--border-width) solid var(--border-color);
+    background: var(--color-bg-primary);
+    border: var(--border-width-md) solid var(--color-border-dark);
+    border-bottom-width: var(--border-width-lg);
+    border-right-width: var(--border-width-md);
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.2);
     position: sticky;
     top: 0;
     z-index: 1000;
+    height: 72px;
 }
 
 .nav-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 1rem 20px;
+    padding: 0 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: 100%;
 }
 
 .nav-logo {
@@ -78,30 +113,32 @@ body {
 }
 
 .nav-logo-icon {
-    width: 50px;
-    height: 50px;
-    background: var(--primary-color);
-    color: var(--white);
+    width: 48px;
+    height: 48px;
+    background: var(--color-primary);
+    color: var(--color-bg-primary);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 900;
-    font-size: 1rem;
-    border: 3px solid var(--border-color);
-    box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--shadow-color);
+    font-weight: 800;
+    font-size: 0.875rem;
+    border: var(--border-width-md) solid var(--color-border-dark);
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
 }
 
 .nav-title {
-    font-size: 1.5rem;
-    font-weight: 900;
+    font-size: 1.25rem;
+    font-weight: 800;
     margin: 0;
-    background: var(--primary-color);
-    color: var(--white);
-    padding: 0.5rem 1rem;
-    border: 3px solid var(--border-color);
-    box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--shadow-color);
+    background: var(--color-primary);
+    color: var(--color-bg-primary);
+    padding: 12px 20px;
+    border: var(--border-width-md) solid var(--color-border-dark);
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
     text-transform: uppercase;
     letter-spacing: 2px;
+    font-size: 1.125rem;
 }
 
 .nav-menu {
@@ -112,100 +149,111 @@ body {
 }
 
 .nav-link {
-    color: var(--text-dark);
+    color: var(--color-text-primary);
     text-decoration: none;
-    padding: 0.85rem 1.5rem;
-    background: var(--white);
-    border: 3px solid var(--border-color);
-    font-weight: 800;
+    padding: 12px 20px;
+    background: var(--color-bg-primary);
+    border: var(--border-width-md) solid var(--color-border-dark);
+    font-weight: 700;
     text-transform: uppercase;
-    font-size: 0.85rem;
-    box-shadow: 4px 4px 0 var(--shadow-color);
-    transition: all 0.2s;
+    font-size: 0.875rem;
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+    transition: all var(--transition-normal);
+    cursor: pointer;
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .nav-link:hover {
     transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0 var(--shadow-color);
-    background: var(--accent-color);
+    box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.2);
+    background: var(--color-accent);
+    color: var(--color-text-primary);
 }
 
 .nav-link.active {
-    background: var(--text-dark);
-    color: var(--white);
-    box-shadow: 4px 4px 0 var(--border-color);
+    background: var(--color-text-primary);
+    color: var(--color-bg-primary);
+    box-shadow: 4px 4px 0 var(--color-border-dark);
 }
 
 /* ═══════════════════════════════════════════
-   🌟 Hero Section - 新野獸主義歡迎區
+   🌟 Hero Section - 優化歡迎區
    ═══════════════════════════════════════════ */
 .hero {
     text-align: center;
-    padding: 4rem 2rem;
-    background: var(--primary-color);
-    color: var(--white);
-    margin-bottom: 3rem;
-    border: 4px solid var(--border-color);
-    box-shadow: 8px 8px 0 var(--shadow-color);
+    padding: 64px 24px;
+    background: var(--color-primary);
+    color: var(--color-bg-primary);
+    margin-bottom: 48px;
+    border: var(--border-width-lg) solid var(--color-border-dark);
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 .hero h2 {
     font-size: 3rem;
-    font-weight: 900;
-    margin-bottom: 1rem;
+    font-weight: 800;
+    margin-bottom: 24px;
     text-transform: uppercase;
     letter-spacing: 3px;
     line-height: 1.1;
 }
 
 .hero p {
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin-bottom: 2rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 40px;
     opacity: 0.95;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .hero-btn {
-    display: inline-block;
-    padding: 1.2rem 3.5rem;
-    background: var(--accent-color);
-    color: var(--text-dark);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 48px;
+    background: var(--color-accent);
+    color: var(--color-text-primary);
     text-decoration: none;
-    font-weight: 900;
-    font-size: 1.2rem;
+    font-weight: 800;
+    font-size: 1.125rem;
     text-transform: uppercase;
-    border: 4px solid var(--border-color);
-    box-shadow: 6px 6px 0 var(--shadow-color);
-    transition: all 0.2s;
+    border: var(--border-width-lg) solid var(--color-border-dark);
+    box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.2);
+    transition: all var(--transition-normal);
+    cursor: pointer;
+    min-width: 200px;
 }
 
 .hero-btn:hover {
-    transform: translate(-3px, -3px);
-    box-shadow: 9px 9px 0 var(--shadow-color);
-    background: var(--white);
-    color: var(--text-dark);
-}
-    50% { box-shadow: 0 6px 24px rgba(0,0,0,0.25); }
+    transform: translate(-4px, -4px);
+    box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.2);
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
 }
 
 /* ═══════════════════════════════════════════
-   🎫 Ticket Cards - 票種卡片
-   ═══════════════════════════════════════════ */
-/* ═══════════════════════════════════════════
-   🎫 Ticket Cards - 新野獸主義票種卡片
+   🎫 Ticket Cards - 優化票種卡片
    ═══════════════════════════════════════════ */
 .tickets-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-    margin-bottom: 3rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 32px;
+    margin-bottom: 64px;
 }
 
 .ticket-card {
-    background: var(--white);
-    padding: 2rem;
-    border: 4px solid var(--border-color);
+    background: var(--color-bg-primary);
+    padding: 32px;
+    border: var(--border-width-lg) solid var(--color-border-dark);
     position: relative;
+    transition: all var(--transition-normal);
+    cursor: pointer;
 }
 
 .ticket-card::before {
@@ -214,50 +262,50 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 6px;
+    height: 8px;
 }
 
-.ticket-card.general::before { background: var(--primary-color); }
-.ticket-card.student::before { background: var(--secondary-color); }
-.ticket-card.vip::before { background: var(--accent-color); }
-.ticket-card.group::before { background: var(--success-color); }
+.ticket-card.general::before { background: var(--color-primary); }
+.ticket-card.student::before { background: var(--color-secondary); }
+.ticket-card.vip::before { background: var(--color-accent); }
+.ticket-card.group::before { background: var(--color-success); }
 
 .ticket-card:hover {
-    transform: translate(-4px, -4px);
-    box-shadow: 6px 6px 0 var(--border-color);
+    transform: translate(-6px, -6px);
+    box-shadow: 8px 8px 0 var(--color-border-dark);
 }
 
 .ticket-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 24px;
 }
 
 .ticket-header h3 {
     font-size: 1.5rem;
-    color: var(--text-dark);
-    font-weight: 900;
+    color: var(--color-text-primary);
+    font-weight: 800;
     text-transform: uppercase;
 }
 
 .ticket-price {
-    background: var(--text-dark);
-    color: var(--white);
-    padding: 0.6rem 1.4rem;
-    font-weight: 900;
-    font-size: 1.3rem;
-    border: 3px solid var(--border-color);
-    box-shadow: 4px 4px 0 var(--shadow-color);
+    background: var(--color-text-primary);
+    color: var(--color-bg-primary);
+    padding: 10px 20px;
+    font-weight: 800;
+    font-size: 1.25rem;
+    border: var(--border-width-md) solid var(--color-border-dark);
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
     text-transform: uppercase;
 }
 
 .ticket-description {
-    color: var(--text-light);
-    margin-bottom: 1.5rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 32px;
     line-height: 1.6;
-    font-size: 0.95rem;
-    font-weight: 600;
+    font-size: 1rem;
+    font-weight: 500;
 }
 
 .ticket-actions {
@@ -265,58 +313,80 @@ body {
 }
 
 /* ═══════════════════════════════════════════
-   🎯 Buttons - 新野獸主義按鈕
+   🌟 Section Title - 優化標題
+   ═══════════════════════════════════════════ */
+.section-title {
+    text-align: center;
+    margin-bottom: 64px;
+    font-size: 2.5rem;
+    color: var(--color-text-primary);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    padding: 24px;
+    border: var(--border-width-lg) solid var(--color-border-dark);
+    background: var(--color-bg-primary);
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* ═══════════════════════════════════════════
+   🎯 Buttons - 優化按鈕 (48px 最小高度)
    ═══════════════════════════════════════════ */
 .btn {
-    display: inline-block;
-    padding: 1rem 2.5rem;
-    font-weight: 900;
-    font-size: 1.1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 32px;
+    font-weight: 700;
+    font-size: 1.125rem;
     cursor: pointer;
     text-decoration: none;
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 1px;
-    transition: all 0.2s;
+    transition: all var(--transition-normal);
+    min-height: 48px;
+    border-radius: 0;
 }
 
 .btn-primary {
-    background: var(--primary-color);
-    color: var(--white);
-    border: 4px solid var(--border-color);
-    box-shadow: 6px 6px 0 var(--shadow-color);
+    background: var(--color-primary);
+    color: var(--color-bg-primary);
+    border: var(--border-width-lg) solid var(--color-border-dark);
+    box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.2);
     width: 100%;
 }
 
 .btn-primary:hover {
     transform: translate(-4px, -4px);
-    box-shadow: 10px 10px 0 var(--shadow-color);
-    background: var(--accent-color);
-    color: var(--text-dark);
+    box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.2);
+    background: var(--color-accent);
+    color: var(--color-text-primary);
 }
 
 .btn-secondary {
-    background: var(--bg-light);
-    color: var(--text-dark);
-    border: 4px solid var(--border-color);
-    box-shadow: 6px 6px 0 var(--shadow-color);
+    background: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+    border: var(--border-width-lg) solid var(--color-border-dark);
+    box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.2);
 }
 
 .btn-secondary:hover {
     transform: translate(-4px, -4px);
-    box-shadow: 10px 10px 0 var(--shadow-color);
-    background: var(--text-dark);
-    color: var(--white);
+    box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.2);
+    background: var(--color-text-primary);
+    color: var(--color-bg-primary);
 }
 
 .btn-small {
-    padding: 0.6rem 1.4rem;
-    font-size: 0.9rem;
-    font-weight: 800;
+    padding: 10px 20px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    min-height: 44px;
 }
 
 /* ═══════════════════════════════════════════
-   📝 Form - 新野獸主義表單
+   📝 Form - 優化表單
    ═══════════════════════════════════════════ */
 .booking-section {
     max-width: 700px;
@@ -324,42 +394,44 @@ body {
 }
 
 .booking-form {
-    background: var(--white);
-    padding: 3rem;
-    border: 4px solid var(--border-color);
-    box-shadow: 8px 8px 0 var(--shadow-color);
+    background: var(--color-bg-primary);
+    padding: 48px;
+    border: var(--border-width-lg) solid var(--color-border-dark);
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 .form-section {
-    margin-bottom: 2.5rem;
-    padding-bottom: 2rem;
-    border-bottom: 4px solid var(--border-color);
+    margin-bottom: 40px;
+    padding-bottom: 32px;
+    border-bottom: var(--border-width-lg) solid var(--color-border-dark);
 }
 
 .form-section:last-child {
     border-bottom: none;
     margin-bottom: 0;
+    padding-bottom: 0;
 }
 
 .form-section h3 {
-    color: var(--text-dark);
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 4px solid var(--text-dark);
-    font-size: 1.4rem;
-    font-weight: 900;
+    color: var(--color-text-primary);
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: var(--border-width-lg) solid var(--color-text-primary);
+    font-size: 1.375rem;
+    font-weight: 800;
     text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 24px;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 0.75rem;
-    font-weight: 900;
-    color: var(--text-dark);
+    margin-bottom: 12px;
+    font-weight: 700;
+    color: var(--color-text-primary);
     font-size: 1rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -367,50 +439,53 @@ body {
 
 .form-group label::after {
     content: '*';
-    color: var(--danger-color);
+    color: var(--color-danger);
     margin-left: 4px;
 }
 
 .form-group input,
 .form-group select {
     width: 100%;
-    padding: 1rem 1.4rem;
-    border: 3px solid var(--border-color);
+    padding: 14px 20px;
+    border: var(--border-width-md) solid var(--color-border-dark);
     font-size: 1rem;
-    font-weight: 700;
-    background: var(--white);
+    font-weight: 600;
+    background: var(--color-bg-primary);
     text-transform: uppercase;
+    transition: all var(--transition-fast);
+    min-height: 48px;
+    border-radius: 0;
 }
 
 .form-group input:focus,
 .form-group select:focus {
     outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 4px 4px 0 var(--shadow-color);
+    border-color: var(--color-primary);
+    box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.2);
 }
 
 .form-group select option {
-    padding: 0.75rem;
+    padding: 12px;
     text-transform: uppercase;
 }
 
 .form-help {
-    color: var(--text-light);
-    font-size: 0.9rem;
-    margin-top: 0.5rem;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    margin-top: 8px;
     display: block;
-    font-weight: 700;
+    font-weight: 500;
 }
 
 .form-actions {
     display: flex;
-    gap: 1rem;
-    margin-top: 2rem;
+    gap: 16px;
+    margin-top: 32px;
     flex-wrap: wrap;
 }
 
 /* ═══════════════════════════════════════════
-   ✨ Success - 新野獸主義成功頁面
+   ✨ Success - 優化成功頁面
    ═══════════════════════════════════════════ */
 .success-section {
     text-align: center;
@@ -419,81 +494,81 @@ body {
 }
 
 .success-icon {
-    width: 120px;
-    height: 120px;
-    background: var(--success-color);
-    color: var(--white);
-    border: 6px solid var(--border-color);
+    width: 96px;
+    height: 96px;
+    background: var(--color-success);
+    color: var(--color-bg-primary);
+    border: var(--border-width-lg) solid var(--color-border-dark);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 5rem;
-    margin: 0 auto 1.5rem;
-    box-shadow: 10px 10px 0 var(--shadow-color);
+    font-size: 4rem;
+    margin: 0 auto 24px;
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 .success-message {
     font-size: 1.5rem;
-    color: var(--text-dark);
-    margin-bottom: 2rem;
-    font-weight: 900;
+    color: var(--color-text-primary);
+    margin-bottom: 32px;
+    font-weight: 700;
     text-transform: uppercase;
 }
 
 .order-details {
-    background: var(--white);
-    padding: 2.5rem;
-    border: 4px solid var(--border-color);
-    box-shadow: 8px 8px 0 var(--shadow-color);
-    margin-bottom: 2rem;
+    background: var(--color-bg-primary);
+    padding: 40px;
+    border: var(--border-width-lg) solid var(--color-border-dark);
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.2);
+    margin-bottom: 32px;
     text-align: left;
 }
 
 .order-details h3 {
-    color: var(--text-dark);
-    margin-bottom: 1.8rem;
-    padding-bottom: 1rem;
-    border-bottom: 4px solid var(--border-color);
-    font-size: 1.5rem;
-    font-weight: 900;
+    color: var(--color-text-primary);
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: var(--border-width-lg) solid var(--color-border-dark);
+    font-size: 1.375rem;
+    font-weight: 700;
     text-transform: uppercase;
 }
 
 .order-info {
     display: grid;
-    gap: 1.2rem;
+    gap: 16px;
 }
 
 .info-group {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
-    border: 3px solid var(--border-color);
-    font-weight: 800;
+    padding: 16px;
+    border: var(--border-width-md) solid var(--color-border-dark);
+    font-weight: 700;
 }
 
 .info-group label {
-    color: var(--text-light);
-    font-weight: 700;
+    color: var(--color-text-secondary);
+    font-weight: 600;
     margin: 0;
     text-transform: uppercase;
 }
 
 .info-group span {
-    color: var(--text-dark);
-    font-weight: 900;
-    font-size: 1.1rem;
+    color: var(--color-text-primary);
+    font-weight: 700;
+    font-size: 1.125rem;
     text-transform: uppercase;
 }
 
 .info-group.total {
-    background: var(--text-dark);
-    color: var(--white);
-    font-weight: 900;
-    font-size: 1.3rem;
-    margin-top: 1rem;
-    border-color: var(--border-color);
+    background: var(--color-text-primary);
+    color: var(--color-bg-primary);
+    font-weight: 800;
+    font-size: 1.25rem;
+    margin-top: 16px;
+    border-color: var(--color-border-dark);
 }
 
 .info-group.total label {
@@ -501,65 +576,65 @@ body {
 }
 
 .info-group.total span {
-    color: var(--white);
+    color: var(--color-bg-primary);
 }
 
 .success-actions {
     display: flex;
-    gap: 1rem;
+    gap: 16px;
     justify-content: center;
     flex-wrap: wrap;
 }
 
 /* ═══════════════════════════════════════════
-   🔔 Notice - 新野獸主義提示框
+   🔔 Notice - 優化提示框
    ═══════════════════════════════════════════ */
 .notice {
-    background: var(--text-dark);
-    color: var(--white);
-    padding: 2rem;
-    border: 4px solid var(--border-color);
-    box-shadow: 8px 8px 0 var(--shadow-color);
-    margin-top: 2rem;
+    background: var(--color-text-primary);
+    color: var(--color-bg-primary);
+    padding: 32px;
+    border: var(--border-width-lg) solid var(--color-border-dark);
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.2);
+    margin-top: 32px;
 }
 
 .notice h4 {
-    margin-bottom: 1rem;
-    color: var(--accent-color);
-    font-size: 1.2rem;
-    font-weight: 900;
+    margin-bottom: 16px;
+    color: var(--color-accent);
+    font-size: 1.25rem;
+    font-weight: 700;
     text-transform: uppercase;
 }
 
 .notice p {
-    font-weight: 700;
+    font-weight: 600;
     line-height: 1.6;
 }
 
 .email-preview {
-    margin-top: 1.5rem;
-    padding: 1.5rem;
-    background: var(--white);
-    border: 3px solid var(--border-color);
+    margin-top: 24px;
+    padding: 24px;
+    background: var(--color-bg-primary);
+    border: var(--border-width-md) solid var(--color-border-dark);
 }
 
 .email-preview h5 {
-    margin-bottom: 1rem;
-    color: var(--text-dark);
+    margin-bottom: 16px;
+    color: var(--color-text-primary);
     font-size: 1rem;
-    font-weight: 900;
+    font-weight: 700;
     text-transform: uppercase;
 }
 
 .email-content {
-    background: var(--bg-light);
-    padding: 1.5rem;
-    border: 2px solid var(--border-color);
+    background: var(--color-bg-secondary);
+    padding: 24px;
+    border: var(--border-width-sm) solid var(--color-border-dark);
     line-height: 1.8;
 }
 
 /* ═══════════════════════════════════════════
-   📊 Admin - 新野獸主義管理頁面
+   📊 Admin - 優化管理頁面
    ═══════════════════════════════════════════ */
 .admin-section {
     max-width: 1200px;
@@ -570,181 +645,89 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
-    padding: 2rem;
-    background: var(--white);
-    border: 4px solid var(--border-color);
-    box-shadow: 8px 8px 0 var(--shadow-color);
+    margin-bottom: 32px;
+    padding: 32px 48px;
+    background: var(--color-bg-primary);
+    border: var(--border-width-lg) solid var(--color-border-dark);
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 .admin-header h2 {
-    color: var(--text-dark);
+    color: var(--color-text-primary);
     margin: 0;
     font-size: 2rem;
-    font-weight: 900;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 2px;
 }
 
-/* ═══════════════════════════════════════════
-   🎫 Ticket Cards - 新野獸主義票種卡片
-   ═══════════════════════════════════════════ */
-.tickets-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-    margin-bottom: 3rem;
-}
-
-.ticket-card {
-    background: var(--white);
-    padding: 2rem;
-    border: 4px solid var(--border-color);
-    position: relative;
-}
-
-.ticket-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 6px;
-}
-
-.ticket-card.general::before { background: var(--primary-color); }
-.ticket-card.student::before { background: var(--secondary-color); }
-.ticket-card.vip::before { background: var(--accent-color); }
-.ticket-card.group::before { background: var(--success-color); }
-
-.ticket-card:hover {
-    transform: translate(-4px, -4px);
-    box-shadow: 6px 6px 0 var(--border-color);
-}
-
-.ticket-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
-.ticket-header h3 {
-    font-size: 1.5rem;
-    color: var(--text-dark);
-    font-weight: 900;
-    text-transform: uppercase;
-}
-
-.ticket-price {
-    background: var(--text-dark);
-    color: var(--white);
-    padding: 0.6rem 1.4rem;
-    font-weight: 900;
-    font-size: 1.3rem;
-    border: 3px solid var(--border-color);
-    box-shadow: 4px 4px 0 var(--shadow-color);
-    text-transform: uppercase;
-}
-
-.ticket-description {
-    color: var(--text-light);
-    margin-bottom: 1.5rem;
-    line-height: 1.6;
-    font-size: 0.95rem;
-    font-weight: 600;
-}
-
-.ticket-actions {
-    text-align: center;
-}
-
-/* ═══════════════════════════════════════════
-   🌟 Section Title - 新野獸主義標題
-   ═══════════════════════════════════════════ */
-.section-title {
-    text-align: center;
-    margin-bottom: 3rem;
-    font-size: 2.5rem;
-    color: var(--text-dark);
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    padding: 1rem;
-    border: 4px solid var(--border-color);
-    background: var(--white);
-    box-shadow: 8px 8px 0 var(--shadow-color);
-}
-
-/* ═══════════════════════════════════════════
-   ✨ Success - 新野獸主義成功頁面
-   ═══════════════════════════════════════════ */
-
-/* 新野獸主義統計卡片 */
+/* 統計卡片 - 優化 */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
     width: 100%;
-    margin-bottom: 1rem;
+    margin-bottom: 32px;
 }
 
 .stat-card {
-    padding: 1.5rem;
-    border: 3px solid var(--border-color);
-    box-shadow: 6px 6px 0 var(--shadow-color);
+    padding: 24px;
+    border: var(--border-width-md) solid var(--color-border-dark);
+    box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.2);
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 16px;
+    min-height: 80px;
 }
 
-.stat-card.total { background: var(--white); border-color: var(--primary-color); }
-.stat-card.pending { background: #fff9e6; border-color: var(--warning-color); }
-.stat-card.confirmed { background: #e8f5e9; border-color: var(--success-color); }
-.stat-card.cancelled { background: #ffebee; border-color: var(--danger-color); }
+.stat-card.total { background: var(--color-bg-primary); border-color: var(--color-primary); }
+.stat-card.pending { background: #fffef0; border-color: var(--color-warning); }
+.stat-card.confirmed { background: #f0fdf4; border-color: var(--color-success); }
+.stat-card.cancelled { background: #fef2f2; border-color: var(--color-danger); }
 
 .stat-icon {
     font-size: 2rem;
-    background: var(--text-dark);
-    color: var(--white);
+    background: var(--color-text-primary);
+    color: var(--color-bg-primary);
     width: 56px;
     height: 56px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 3px solid var(--border-color);
+    border: var(--border-width-md) solid var(--color-border-dark);
+    flex-shrink: 0;
 }
 
 .stat-content .stat-label {
     display: block;
-    font-size: 0.8rem;
-    color: var(--text-light);
-    margin-bottom: 0.25rem;
-    font-weight: 700;
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 4px;
+    font-weight: 600;
     text-transform: uppercase;
 }
 
 .stat-content .stat-value {
-    font-size: 1.8rem;
-    font-weight: 900;
-    color: var(--text-dark);
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
 }
 
-/* 新野獸主義搜尋框 */
+/* 搜尋框 - 優化 */
 .admin-controls {
-    margin-bottom: 2rem;
+    margin-bottom: 32px;
 }
 
 .search-form {
-    background: var(--white);
-    padding: 1.5rem;
-    border: 4px solid var(--border-color);
-    box-shadow: 8px 8px 0 var(--shadow-color);
+    background: var(--color-bg-primary);
+    padding: 24px;
+    border: var(--border-width-lg) solid var(--color-border-dark);
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 .search-box {
     display: flex;
-    gap: 1rem;
+    gap: 16px;
     align-items: center;
     flex-wrap: wrap;
 }
@@ -755,68 +738,65 @@ body {
     position: relative;
 }
 
-.search-icon {
-    position: absolute;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 1.2rem;
-}
-
 .search-input {
     width: 100%;
-    padding: 0.85rem 1.2rem 0.85rem 2.5rem;
-    border: 3px solid var(--border-color);
+    padding: 14px 20px 14px 44px;
+    border: var(--border-width-md) solid var(--color-border-dark);
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
-    background: var(--white);
+    background: var(--color-bg-primary);
+    transition: all var(--transition-fast);
+    min-height: 48px;
 }
 
 .search-input:focus {
     outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 6px 6px 0 var(--shadow-color);
+    border-color: var(--color-primary);
+    box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.2);
 }
 
 .clear-btn {
     position: absolute;
-    right: 1rem;
+    right: 16px;
     top: 50%;
     transform: translateY(-50%);
-    color: var(--text-light);
+    color: var(--color-text-light);
     cursor: pointer;
-    font-weight: 900;
-    padding: 0.25rem;
-    font-size: 1.2rem;
-    transition: all 0.2s;
+    font-weight: 700;
+    padding: 4px 8px;
+    font-size: 1.25rem;
+    transition: all var(--transition-fast);
+    line-height: 1;
 }
 
 .clear-btn:hover {
-    color: var(--danger-color);
+    color: var(--color-danger);
 }
 
 .status-select {
-    padding: 0.85rem 1.2rem;
-    border: 3px solid var(--border-color);
+    padding: 14px 20px;
+    border: var(--border-width-md) solid var(--color-border-dark);
     font-size: 1rem;
-    min-width: 140px;
-    background: var(--white);
-    font-weight: 700;
+    min-width: 160px;
+    background: var(--color-bg-primary);
+    font-weight: 600;
     text-transform: uppercase;
+    transition: all var(--transition-fast);
+    min-height: 48px;
 }
 
 .status-select:focus {
     outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 6px 6px 0 var(--shadow-color);
+    border-color: var(--color-primary);
+    box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.2);
 }
 
-/* 新野獸主義訂單表格 */
+/* 訂單表格 - 優化 */
 .orders-table-container {
-    background: var(--white);
-    border: 4px solid var(--border-color);
-    box-shadow: 8px 8px 0 var(--shadow-color);
+    background: var(--color-bg-primary);
+    border: var(--border-width-lg) solid var(--color-border-dark);
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.2);
     overflow: hidden;
 }
 
@@ -827,151 +807,152 @@ body {
 
 .orders-table th,
 .orders-table td {
-    padding: 1.2rem 1.5rem;
+    padding: 16px 20px;
     text-align: left;
-    border-bottom: 3px solid var(--border-color);
+    border-bottom: var(--border-width-md) solid var(--color-border-dark);
 }
 
 .orders-table th {
-    background: var(--text-dark);
-    color: var(--white);
-    font-weight: 900;
-    font-size: 0.9rem;
+    background: var(--color-text-primary);
+    color: var(--color-bg-primary);
+    font-weight: 700;
+    font-size: 0.875rem;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
 .orders-table tr:hover {
-    background: var(--bg-light);
+    background: var(--color-bg-secondary);
 }
 
 .orders-table .price {
-    font-weight: 900;
-    color: var(--success-color);
+    font-weight: 700;
+    color: var(--color-success);
 }
 
 .order-id .order-number {
     font-family: 'Courier New', monospace;
-    font-weight: 900;
-    color: var(--text-dark);
-    background: var(--bg-light);
-    padding: 0.25rem 0.75rem;
-    border: 2px solid var(--border-color);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    background: var(--color-bg-secondary);
+    padding: 4px 12px;
+    border: var(--border-width-sm) solid var(--color-border-dark);
     display: inline-block;
+    font-size: 0.875rem;
 }
 
 .quantity-badge {
     display: inline-block;
-    padding: 0.35rem 0.85rem;
-    background: var(--text-dark);
-    color: var(--white);
-    border: 2px solid var(--border-color);
+    padding: 6px 14px;
+    background: var(--color-text-primary);
+    color: var(--color-bg-primary);
+    border: var(--border-width-sm) solid var(--color-border-dark);
     font-size: 0.8rem;
-    font-weight: 900;
+    font-weight: 700;
+    text-transform: uppercase;
 }
 
 .action-cell {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 12px;
 }
 
 .btn-view {
-    padding: 0.5rem 1rem;
-    background: var(--primary-color);
-    color: var(--white);
+    padding: 10px 16px;
+    background: var(--color-primary);
+    color: var(--color-bg-primary);
     text-decoration: none;
-    border: 3px solid var(--border-color);
-    box-shadow: 4px 4px 0 var(--shadow-color);
-    font-size: 0.85rem;
-    font-weight: 900;
-    transition: all 0.2s;
+    border: var(--border-width-md) solid var(--color-border-dark);
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+    font-size: 0.875rem;
+    font-weight: 700;
+    transition: all var(--transition-fast);
+    text-transform: uppercase;
+    min-height: 44px;
 }
 
 .btn-view:hover {
     transform: translate(-3px, -3px);
-    box-shadow: 7px 7px 0 var(--shadow-color);
-}
-
-.status-form {
-    display: inline-block;
-    margin: 0;
+    box-shadow: 7px 7px 0 rgba(0, 0, 0, 0.2);
 }
 
 .status-select-small {
-    padding: 0.45rem 0.75rem;
-    border: 2px solid var(--border-color);
+    padding: 8px 12px;
+    border: var(--border-width-sm) solid var(--color-border-dark);
     font-size: 0.8rem;
-    background: var(--white);
-    font-weight: 700;
+    background: var(--color-bg-primary);
+    font-weight: 600;
+    min-height: 44px;
 }
 
 .timestamp {
-    font-size: 0.9rem;
-    color: var(--text-light);
-    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    font-weight: 500;
 }
 
 /* 狀態列背景 */
-.order-row.status-pending { background-color: #fff9e6; }
-.order-row.status-confirmed { background-color: #e8f5e9; }
-.order-row.status-cancelled { background-color: #ffebee; }
+.order-row.status-pending { background-color: #fffef0; }
+.order-row.status-confirmed { background-color: #f0fdf4; }
+.order-row.status-cancelled { background-color: #fef2f2; }
 
 /* 無訂單狀態 */
 .no-orders {
     text-align: center;
-    padding: 4rem 2rem;
-    background: var(--white);
-    border: 4px solid var(--border-color);
-    box-shadow: 8px 8px 0 var(--shadow-color);
+    padding: 64px 32px;
+    background: var(--color-bg-primary);
+    border: var(--border-width-lg) solid var(--color-border-dark);
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 .no-orders-icon {
     font-size: 5rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 24px;
 }
 
 .no-orders h3 {
-    color: var(--text-dark);
-    margin-bottom: 1rem;
-    font-size: 1.8rem;
-    font-weight: 900;
+    color: var(--color-text-primary);
+    margin-bottom: 16px;
+    font-size: 1.875rem;
+    font-weight: 700;
     text-transform: uppercase;
 }
 
 .no-orders p {
-    color: var(--text-light);
-    margin-bottom: 2rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 32px;
     max-width: 400px;
     margin-left: auto;
     margin-right: auto;
-    font-weight: 700;
+    font-weight: 500;
 }
 
 /* 頁腳 */
 .footer {
-    background: var(--text-dark);
+    background: var(--color-text-primary);
     color: rgba(255,255,255,0.7);
-    padding: 2rem 0;
+    padding: 32px 0;
     text-align: center;
-    border-top: 4px solid var(--border-color);
+    border-top: var(--border-width-lg) solid var(--color-border-dark);
 }
 
 .footer p {
     margin: 0;
-    font-size: 0.9rem;
-    font-weight: 700;
+    font-size: 0.875rem;
+    font-weight: 600;
 }
 
 /* 提示訊息 */
 .alert {
-    padding: 1rem 1.5rem;
-    margin-bottom: 1.5rem;
+    padding: 16px 24px;
+    margin-bottom: 24px;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    border: 3px solid var(--border-color);
-    font-weight: 700;
+    gap: 12px;
+    border: var(--border-width-md) solid var(--color-border-dark);
+    font-weight: 600;
+    border-radius: var(--radius-md);
 }
 
 .alert-danger {
@@ -985,7 +966,7 @@ body {
 }
 
 .alert-warning {
-    background: #fffbeb;
+    background: #fffef0;
     color: #d97706;
 }
 
@@ -994,8 +975,9 @@ body {
     .hero h2 { font-size: 2rem; }
     .admin-header {
         flex-direction: column;
-        gap: 1.5rem;
+        gap: 24px;
         text-align: center;
+        padding: 24px;
     }
     .search-box {
         flex-direction: column;
@@ -1003,19 +985,39 @@ body {
     }
     .status-select, .btn {
         width: 100%;
+        min-width: auto;
     }
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+    .nav-container {
+        padding: 0 16px;
+    }
+    .container { padding: 0 16px; }
 }
 
 @media (max-width: 480px) {
-    .hero { padding: 3rem 1.5rem; }
-    .hero h2 { font-size: 1.6rem; }
-    .hero-btn { padding: 0.85rem 2rem; }
+    .hero { padding: 48px 16px; }
+    .hero h2 { font-size: 1.625rem; }
+    .hero-btn { padding: 14px 32px; font-size: 1rem; }
     .tickets-grid { grid-template-columns: 1fr; }
-    .nav-link { padding: 0.5rem 1rem; font-size: 0.8rem; }
+    .nav-link { padding: 10px 14px; font-size: 0.8rem; }
     .stat-icon { width: 48px; height: 48px; font-size: 1.5rem; }
-    .orders-table { font-size: 0.8rem; }
-    .orders-table th, .orders-table td { padding: 0.8rem; }
+    .orders-table { font-size: 0.875rem; }
+    .orders-table th, .orders-table td { padding: 12px 10px; }
+    .ticket-card { padding: 24px; }
+    .booking-form { padding: 32px; }
+}
+
+/* 訪客模式 - 深色模式支援 */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-text-primary: #f1f5f9;
+        --color-text-secondary: #94a3b8;
+        --color-bg-primary: #0f172a;
+        --color-bg-secondary: #1e293b;
+        --color-bg-tertiary: #0f172a;
+        --color-border: #334155;
+    }
+    body { background-color: var(--color-bg-tertiary); }
 }
