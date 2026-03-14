@@ -3,14 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>管理訂單 - 簡易訂票系統</title>
+    <title>管理訂單 - VibeCoding 票務系統</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <header>
         <nav class="navbar">
             <div class="nav-container">
-                <h1 class="nav-title">簡易訂票系統</h1>
+                <div class="nav-logo">
+                    <div class="nav-logo-icon"> TICKET</div>
+                    <h1 class="nav-title">VibeCoding 票務系統</h1>
+                </div>
                 <ul class="nav-menu">
                     <li><a href="{{ url_for('index') }}" class="nav-link">首頁</a></li>
                     <li><a href="{{ url_for('book') }}" class="nav-link">立即訂票</a></li>
@@ -23,23 +26,35 @@
     <main class="container">
         <section class="admin-section">
             <div class="admin-header">
-                <h2>訂單管理</h2>
-                <div class="order-stats">
-                    <div class="stat-item">
-                        <span class="stat-label">總訂單數：</span>
-                        <span class="stat-value">{{ orders|length }}</span>
+                <h2 class="section-title">訂單管理</h2>
+                <div class="stats-grid">
+                    <div class="stat-card total">
+                        <div class="stat-icon">📋</div>
+                        <div class="stat-content">
+                            <span class="stat-label">總訂單數</span>
+                            <span class="stat-value">{{ orders|length }}</span>
+                        </div>
                     </div>
-                    <div class="stat-item">
-                        <span class="stat-label">待確認：</span>
-                        <span class="stat-value">{{ orders|selectattr('status', 'equalto', 'pending')|list|length }}</span>
+                    <div class="stat-card pending">
+                        <div class="stat-icon">⏳</div>
+                        <div class="stat-content">
+                            <span class="stat-label">待確認</span>
+                            <span class="stat-value">{{ stats.pending }}</span>
+                        </div>
                     </div>
-                    <div class="stat-item">
-                        <span class="stat-label">已確認：</span>
-                        <span class="stat-value">{{ orders|selectattr('status', 'equalto', 'confirmed')|list|length }}</span>
+                    <div class="stat-card confirmed">
+                        <div class="stat-icon">✓</div>
+                        <div class="stat-content">
+                            <span class="stat-label">已確認</span>
+                            <span class="stat-value">{{ stats.confirmed }}</span>
+                        </div>
                     </div>
-                    <div class="stat-item">
-                        <span class="stat-label">已取消：</span>
-                        <span class="stat-value">{{ orders|selectattr('status', 'equalto', 'cancelled')|list|length }}</span>
+                    <div class="stat-card cancelled">
+                        <div class="stat-icon">✕</div>
+                        <div class="stat-content">
+                            <span class="stat-label">已取消</span>
+                            <span class="stat-value">{{ stats.cancelled }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -47,9 +62,15 @@
             <!-- Search and Filter Form -->
             <div class="admin-controls">
                 <form method="GET" class="search-form">
-                    <div class="search-group">
-                        <input type="text" name="search" placeholder="搜尋訂票人、電話或電子郵件..." value="{{ search_term }}" class="search-input">
-                        <select name="status" class="status-filter">
+                    <div class="search-box">
+                        <div class="search-input-wrapper">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" name="search" placeholder="搜尋訂票人、電話或電子郵件..." value="{{ search_term }}" class="search-input">
+                            {% if search_term %}
+                            <a href="{{ url_for('admin') }}" class="clear-btn" title="清除搜尋">✕</a>
+                            {% endif %}
+                        </div>
+                        <select name="status" class="status-select">
                             <option value="all" {% if status_filter == 'all' %}selected{% endif %}>所有狀態</option>
                             <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>待確認</option>
                             <option value="confirmed" {% if status_filter == 'confirmed' %}selected{% endif %}>已確認</option>
@@ -81,25 +102,34 @@
                     <tbody>
                         {% for order in orders %}
                         <tr class="order-row status-{{ order.status }}">
-                            <td>{{ order.id }}</td>
-                            <td>{{ order.ticket_type }}</td>
-                            <td>{{ order.quantity }} 張</td>
-                            <td class="price">NT$ {{ order.total_price }}</td>
-                            <td>{{ order.name }}</td>
-                            <td>{{ order.phone }}</td>
-                            <td>{{ order.email }}</td>
+                            <td class="order-id">
+                                <span class="order-number">{{ order.order_number }}</span>
+                            </td>
+                            <td>{{ order.ticket_name }}</td>
                             <td>
+                                <span class="quantity-badge">{{ order.quantity }}張</span>
+                            </td>
+                            <td class="price">NT$ {{ order.total_price }}</td>
+                            <td>{{ order.name|sanitize }}</td>
+                            <td>{{ order.phone|sanitize }}</td>
+                            <td>{{ order.email|sanitize }}</td>
+                            <td>
+                                <span class="status-badge status-{{ order.status }}">
+                                    {% if order.status == 'pending' %}⏳ 待確認{% elif order.status == 'confirmed' %}✓ 已確認{% else %}✕ 已取消{% endif %}
+                                </span>
+                            </td>
+                            <td class="timestamp">{{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td class="action-cell">
+                                <a href="{{ url_for('success', order_id=order.id) }}" class="btn-view">查看詳情</a>
                                 <form method="POST" action="{{ url_for('update_order_status', order_id=order.id) }}" class="status-form">
-                                    <select name="status" class="status-select" onchange="this.form.submit()">
+                                    <!-- CSRF Token -->
+                                    <input type="hidden" name="csrf_token" value="{{ generate_csrf_token() }}"/>
+                                    <select name="status" class="status-select-small" onchange="this.form.submit()">
                                         <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>待確認</option>
                                         <option value="confirmed" {% if order.status == 'confirmed' %}selected{% endif %}>已確認</option>
                                         <option value="cancelled" {% if order.status == 'cancelled' %}selected{% endif %}>已取消</option>
                                     </select>
                                 </form>
-                            </td>
-                            <td>{{ order.order_time }}</td>
-                            <td>
-                                <a href="{{ url_for('success', order_id=order.id) }}" class="btn btn-small btn-primary">查看詳情</a>
                             </td>
                         </tr>
                         {% endfor %}
@@ -131,7 +161,7 @@
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 簡易訂票系統. All rights reserved.</p>
+            <p>&copy; 2025 VibeCoding 簡易訂票系統. All rights reserved.</p>
         </div>
     </footer>
 </body>

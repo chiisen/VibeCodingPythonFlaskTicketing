@@ -3,14 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>訂票表單 - 簡易訂票系統</title>
+    <title>訂票表單 - VibeCoding 票務系統</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <header>
         <nav class="navbar">
             <div class="nav-container">
-                <h1 class="nav-title">簡易訂票系統</h1>
+                <div class="nav-logo">
+                    <div class="nav-logo-icon"> TICKET</div>
+                    <h1 class="nav-title">VibeCoding 票務系統</h1>
+                </div>
                 <ul class="nav-menu">
                     <li><a href="{{ url_for('index') }}" class="nav-link">首頁</a></li>
                     <li><a href="{{ url_for('book') }}" class="nav-link active">立即訂票</a></li>
@@ -22,12 +25,13 @@
 
     <main class="container">
         <section class="booking-section">
-            <h2>填寫訂票資訊</h2>
+            <h2 class="section-title">填寫訂票資訊</h2>
 
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
                         <div class="alert alert-{{ category if category != 'error' else 'danger' }}">
+                            {% if category == 'error' %}⚠️ {% elif category == 'success' %}✅ {% endif %}
                             {{ message }}
                         </div>
                     {% endfor %}
@@ -35,10 +39,14 @@
             {% endwith %}
 
             <form action="{{ url_for('submit') }}" method="POST" class="booking-form" id="bookingForm">
+                <!-- CSRF Token -->
+                <input type="hidden" name="csrf_token" value="{{ generate_csrf_token() }}"/>
+
                 <div class="form-section">
                     <h3>票種選擇</h3>
+
                     <div class="form-group">
-                        <label for="ticket_type">選擇票種：</label>
+                        <label for="ticket_type" data-required="*">選擇票種：</label>
                         <select name="ticket_type" id="ticket_type" required>
                             <option value="">請選擇票種</option>
                             {% for ticket in tickets %}
@@ -49,7 +57,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="quantity">數量：</label>
+                        <label for="quantity" data-required="*">數量：</label>
                         <input type="number" name="quantity" id="quantity" min="1" max="10" required>
                         <small class="form-help">每筆訂單最多10張票</small>
                         <div class="error-message" id="quantityError"></div>
@@ -63,27 +71,33 @@
 
                 <div class="form-section">
                     <h3>個人資訊</h3>
+
                     <div class="form-group">
-                        <label for="name">姓名：</label>
-                        <input type="text" name="name" id="name" required>
+                        <label for="name" data-required="*">姓名：</label>
+                        <input type="text" name="name" id="name" placeholder="請輸入您的姓名" required>
                         <div class="error-message" id="nameError"></div>
                     </div>
 
                     <div class="form-group">
-                        <label for="phone">電話：</label>
-                        <input type="tel" name="phone" id="phone" required>
+                        <label for="phone" data-required="*">電話：</label>
+                        <input type="tel" name="phone" id="phone" placeholder="09xxxxxxxx" pattern="09\d{8}" required>
+                        <small class="form-help">請輸入台灣手機號碼 (09xxxxxxxx)</small>
                         <div class="error-message" id="phoneError"></div>
                     </div>
 
                     <div class="form-group">
-                        <label for="email">電子郵件：</label>
-                        <input type="email" name="email" id="email" required>
+                        <label for="email" data-required="*">電子郵件：</label>
+                        <input type="email" name="email" id="email" placeholder="example@mail.com" required>
+                        <small class="form-help">我們會發送確認信至您的電子郵件</small>
                         <div class="error-message" id="emailError"></div>
                     </div>
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="btn btn-primary" id="submitBtn">提交訂票</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <span>確認訂票</span>
+                        <span style="margin-left: 8px;">→</span>
+                    </button>
                     <a href="{{ url_for('index') }}" class="btn btn-secondary">返回首頁</a>
                 </div>
             </form>
@@ -92,7 +106,7 @@
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 簡易訂票系統. All rights reserved.</p>
+            <p>&copy; 2025 VibeCoding 簡易訂票系統. All rights reserved.</p>
         </div>
     </footer>
 
@@ -120,7 +134,7 @@
                 const price = parseInt(selectedOption.getAttribute('data-price')) || 0;
                 const qty = parseInt(quantity.value) || 0;
                 const total = price * qty;
-                totalPriceDisplay.textContent = `NT$ ${total}`;
+                totalPriceDisplay.textContent = `NT$ ${total.toLocaleString()}`;
             }
 
             // Form validation functions
@@ -238,6 +252,10 @@
                     }
                     return false;
                 }
+
+                // Add loading state
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.7';
             });
 
             // Initialize total price

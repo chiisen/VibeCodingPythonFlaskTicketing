@@ -1,1 +1,12 @@
+# 核心框架
 Flask==2.3.3
+Flask-WTF==1.2.1
+WTForms==3.2.1
+Flask-SQLAlchemy==3.1.1
+
+# 資料庫驅動（SQLite 已內建，如需 MySQL 取消註解）
+# SQLAlchemy==2.0.0
+# pymysql==1.1.0
+
+# 環境變數管理
+python-dotenv==1.0.0

@@ -3,14 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>訂票成功 - 簡易訂票系統</title>
+    <title>訂票成功 - VibeCoding 票務系統</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <header>
         <nav class="navbar">
             <div class="nav-container">
-                <h1 class="nav-title">簡易訂票系統</h1>
+                <div class="nav-logo">
+                    <div class="nav-logo-icon"> TICKET</div>
+                    <h1 class="nav-title">VibeCoding 票務系統</h1>
+                </div>
                 <ul class="nav-menu">
                     <li><a href="{{ url_for('index') }}" class="nav-link">首頁</a></li>
                     <li><a href="{{ url_for('book') }}" class="nav-link">立即訂票</a></li>
@@ -31,11 +34,11 @@
                 <div class="order-info">
                     <div class="info-group">
                         <label>訂單編號：</label>
-                        <span>{{ order.id }}</span>
+                        <span><code style="font-size: 0.9em; padding: 0.2em 0.6em; background: #e9ecef; border-radius: 4px;">{{ order.order_number }}</code></span>
                     </div>
                     <div class="info-group">
                         <label>票種：</label>
-                        <span>{{ order.ticket_type }}</span>
+                        <span>{{ order.ticket_name }}</span>
                     </div>
                     <div class="info-group">
                         <label>票價：</label>
@@ -47,7 +50,7 @@
                     </div>
                     <div class="info-group total">
                         <label>總金額：</label>
-                        <span class="total-amount">NT$ {{ order.total_price }}</span>
+                        <span>NT$ {{ order.total_price }}</span>
                     </div>
                     <div class="info-group">
                         <label>訂票人：</label>
@@ -63,7 +66,7 @@
                     </div>
                     <div class="info-group">
                         <label>訂票時間：</label>
-                        <span>{{ order.order_time }}</span>
+                        <span>{{ order.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</span>
                     </div>
                 </div>
             </div>
@@ -75,23 +78,25 @@
 
             <div class="notice">
                 <h4>📧 電子郵件確認</h4>
-                <p>我們已經發送訂票確認郵件至您的電子郵件信箱：<strong>{{ order.email }}</strong></p>
+                <p>我們已經發送訂票確認郵件至您的電子郵件信箱：</p>
+                <p style="font-size: 1.2rem; font-weight: 700; color: white; margin: 1rem 0;">{{ order.email }}</p>
                 <p>請檢查您的電子郵件信箱以確認訂票詳情。如果您沒有收到郵件，請檢查垃圾郵件資料夾。</p>
+
                 <div class="email-preview">
-                    <h5>郵件預覽：</h5>
+                    <h5>📧 郵件預覽</h5>
                     <div class="email-content">
-                        <p><strong>訂票確認通知</strong></p>
-                        <p>親愛的 {{ order.name }} 先生/女士，</p>
-                        <p>您的訂票已成功處理！訂單詳情如下：</p>
+                        <p style="font-weight: bold; color: #1e3c72; border-bottom: 1px solid #e9ecef; padding-bottom: 0.5rem;">訂票確認通知</p>
+                        <p>親愛的 <strong>{{ order.name }}</strong> 先生/女士，</p>
+                        <p style="color: #27ae60;">您的訂票已成功處理！訂單詳情如下：</p>
                         <ul>
-                            <li>訂單編號：{{ order.id }}</li>
-                            <li>票種：{{ order.ticket_type }}</li>
-                            <li>數量：{{ order.quantity }} 張</li>
-                            <li>總金額：NT$ {{ order.total_price }}</li>
-                            <li>訂票時間：{{ order.order_time }}</li>
+                            <li><strong>訂單編號：</strong> {{ order.order_number }}</li>
+                            <li><strong>票種：</strong> {{ order.ticket_name }}</li>
+                            <li><strong>數量：</strong> {{ order.quantity }} 張</li>
+                            <li><strong>總金額：</strong> NT$ {{ order.total_price }}</li>
+                            <li><strong>訂票時間：</strong> {{ order.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</li>
                         </ul>
-                        <p>感謝您的訂票！如有任何問題，請聯繫客服。</p>
-                        <p>祝您觀賞愉快！</p>
+                        <p style="color: #7f8c8d;">感謝您的訂票！如有任何問題，請聯繫客服。</p>
+                        <p style="color: #7f8c8d;">祝您觀賞愉快！</p>
                     </div>
                 </div>
             </div>
@@ -100,7 +105,7 @@
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 簡易訂票系統. All rights reserved.</p>
+            <p>&copy; 2025 VibeCoding 簡易訂票系統. All rights reserved.</p>
         </div>
     </footer>
 </body>

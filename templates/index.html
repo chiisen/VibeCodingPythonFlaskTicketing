@@ -3,14 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>簡易訂票系統</title>
+    <title>簡易訂票系統 - VibeCoding</title>
+    <meta name="description" content="現代化簡易訂票系統">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <header>
         <nav class="navbar">
             <div class="nav-container">
-                <h1 class="nav-title">簡易訂票系統</h1>
+                <div class="nav-logo">
+                    <div class="nav-logo-icon"> TICKET</div>
+                    <h1 class="nav-title">VibeCoding 票務系統</h1>
+                </div>
                 <ul class="nav-menu">
                     <li><a href="{{ url_for('index') }}" class="nav-link active">首頁</a></li>
                     <li><a href="{{ url_for('book') }}" class="nav-link">立即訂票</a></li>
@@ -22,18 +26,19 @@
 
     <main class="container">
         <section class="hero">
-            <h2>歡迎來到簡易訂票系統</h2>
-            <p>選擇您心儀的票種，輕鬆完成訂票程序</p>
+            <h2>🎉 歡迎來到 VibeCoding 票務系統</h2>
+            <p>選取您心儀的票種，輕鬆完成訂票程序！<br>提供即時驗證、動態價格與最佳體驗</p>
+            <a href="{{ url_for('book') }}" class="hero-btn">立即訂票</a>
         </section>
 
         <section class="tickets-section">
-            <h2>票種介紹</h2>
+            <h2 class="section-title">(fmt:3) 票種介紹</h2>
             <div class="tickets-grid">
                 {% for ticket in tickets %}
-                <div class="ticket-card">
+                <div class="ticket-card {{ 'student' if ticket.id == 2 else 'vip' if ticket.id == 3 else 'group' if ticket.id == 4 else 'general' }}">
                     <div class="ticket-header">
                         <h3>{{ ticket.name }}</h3>
-                        <span class="price">NT$ {{ ticket.price }}</span>
+                        <span class="ticket-price">NT$ {{ ticket.price }}</span>
                     </div>
                     <p class="ticket-description">{{ ticket.description }}</p>
                     <div class="ticket-actions">
@@ -47,7 +52,7 @@
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 簡易訂票系統. All rights reserved.</p>
+            <p>&copy; 2025 VibeCoding 簡易訂票系統. All rights reserved.</p>
         </div>
     </footer>
 </body>
